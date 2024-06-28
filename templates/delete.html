@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<html>
+  <head>
+    <title>Delete Data</title>
+  </head>
+  <body>
+    <a class="button" href="{{ url_for('read_data', table_name=table_name) }}">Back to Read Page</a>    
+    
+    <h1>Delete Data</h1>
+    <form method="POST" action="/delete">
+      <input type="hidden" name="table_name" value="{{ table_name }}">
+      <p>Primary key value of the row you wish to delete:</p>
+      <label>{{ pk_column }}:</label>
+      <input type="text" name="pk" value="{{ pk_value }}">
+      <br><br>
+      <input type="submit" value="Delete">
+    </form>
+  </body>
+</html>
+{% endblock %}

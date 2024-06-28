@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+  <head>    
+    <a class="btn btn-primary" href="{{ url_for('index') }}">Back to Home</a>
+    <br>
+    <meta charset="UTF-8">
+    <title>Data on{{ table_name }} Table</title>
+  </head>
+  <body>
+    <h1>{{ table_name }} Table</h1>
+    <hr>
+    <table>
+      <thead>
+        <tr>
+          {% for column in columns %}
+            <th>{{ column }}</th>
+          {% endfor %}
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+          <tr>
+            {% for value in row %}
+              <td>{{ value }}</td>
+            {% endfor %}
+            <td>
+              <form method="post" action="{{ url_for('read') }}">
+                <input type="hidden" name="table_name" value="{{ table_name }}">
+                <input type="hidden" name="primary_key" value="{{ columns[0] }}">
+                <input type="hidden" name="pk_value" value="{{ row[0] }}">
+                <input type="submit" value="Update/Delete">
+              </form>
+              
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+{% endblock %}

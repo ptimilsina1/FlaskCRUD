@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Database Tables</h1>
+
+  <table>
+    {% set col_count = 4 %}
+    {% set col_width = 100 // col_count %}
+    {% for i in range(0, tables|length, col_count) %}
+      <tr>
+        {% for table in tables[i:i+col_count] %}
+          <td width="{{ col_width }}%">
+            <a href="{{ url_for('read_data', table_name=table) }}">{{ table.replace('_', ' ').title() }}</a>
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}

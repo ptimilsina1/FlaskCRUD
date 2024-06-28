@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<html>
+  <head>
+    <title>Read Data</title>
+  </head>
+  <body>    
+    <a class="button" href="/">Home</a>
+    <br><br>
+    <h2>Data in {{ table_name.replace('_', ' ').title() }}</h2>
+    <form method="POST" action="/read">
+      <input type="hidden" name="table_name" value="{{ table_name }}">
+      {% if data %}
+      <label>{{ data[0].__table__.columns[0].name }}</label>
+      <input type="text" name="{{ data[0].__table__.columns[0].name }}" value="{{ request.form.get(data[0].__table__.columns[0].name, '') }}">
+      {% endif %}
+      <input type="submit" value="Filter">
+    </form>
+    <br>
+    {% if data %}
+    <table>
+      <thead>
+        <tr>
+          {% for column in data[0].__table__.columns %}
+            <th>{{ column.name }}</th>
+          {% endfor %}
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in pagination.items %}
+          <tr>
+            {% for column in row.__table__.columns %}
+              <td>{{ getattr(row, column.name) }}</td>
+            {% endfor %}
+            <td>
+              <a href="{{ url_for('update_data', table_name=table_name, pk=getattr(row, pk_column)) }}">Edit</a>
+              <a href="{{ url_for('delete_data', table_name=table_name, pk=getattr(row, pk_column)) }}">Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No data found.</p>
+    {% endif %}
+    {% if pagination.has_prev %}
+      <a href="{{ url_for('read_data', table_name=table_name, page=pagination.prev_num) }}">Prev</a>
+    {% endif %}
+    {% for num in pagination.iter_pages(left_edge=1, left_current=1, right_current=2, right_edge=1) %}
+    {% if num %}
+      {% if num != pagination.page %}
+        <a href="{{ url_for('read_data', table_name=table_name, page=num) }}">{{ num }}</a>
+      {% else %}
+        <strong>{{ num }}</strong>
+      {% endif %}
+    {% elif loop.index == 1 %}
+      <a href="{{ url_for('read_data', table_name=table_name, page=1) }}">First</a>
+    {% elif loop.index == pagination.pages %}
+      <a href="{{ url_for('read_data', table_name=table_name, page=pagination.pages) }}">Last</a>
+    {% endif %}
+  {% endfor %}
+  {% if pagination.has_next %}
+    <a href="{{ url_for('read_data', table_name=table_name, page=pagination.next_num) }}">Next</a>
+  {% endif %}
+    <br>
+    {% if request.form and pagination %}
+      <a class="button" href="{{ url_for('read_data', table_name=table_name) }}">Back</a>
+    {% endif %}
+    <br><br>
+    <a class="button" href="/insert?table_name={{ table_name }}">Insert New Data</a>
+    <a class="button" href="{{ url_for('read_schema', table_name=table_name) }}">Table Schema</a>
+  </body>
+</html>
+{% endblock %}

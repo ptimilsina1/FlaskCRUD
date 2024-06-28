@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Insert Data into {{table_name}}</h1>
+
+  <form method="post" id="insert-form">
+    <div>
+      <label for="table_name">Table Name:</label>
+      <select id="table_name" name="table_name" disabled>
+        {% for table in tables %}
+          <option value="{{ table }}" {% if table == table_name %}selected{% endif %}>{{ table }}</option>
+        {% endfor %}
+      </select>
+      <input type="hidden" name="table_name" value="{{ table_name }}">
+    </div>
+    {% for column in model_columns %}
+      <div>
+        <label for="{{ column }}">{{ column }}:</label>
+        <input type="text" id="{{ column }}" name="{{ column }}">
+      </div>
+    {% endfor %}
+    <button type="submit" id="insert-btn">Submit</button>
+  </form>
+  
+  <script>
+    document.querySelector('#insert-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+      fetch('/insert', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          window.alert('Data inserted successfully!');
+          window.location = '{{ url_for('read_data', table_name=table_name) }}';
+        } else {
+          window.alert('Error inserting data!');
+        }
+      });
+    });
+  </script>
+{% endblock %}

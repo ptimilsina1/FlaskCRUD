@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<html>
+<head>
+    <title>Read Schema</title>
+</head>
+<body>
+    <h1>Table: {{ table_name.replace('_', ' ').title() }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Column Name</th>
+                <th>Data Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for column, column_type in zip(columns, column_types) %}
+            <tr>
+                <td>{{ column }}</td>
+                <td>{{ column_type }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('read_data', table_name=table_name) }}">Back</a>
+</body>
+</html>
+{% endblock %}

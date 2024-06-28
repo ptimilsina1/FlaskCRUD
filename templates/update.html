@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<html>
+  <head>  
+    <title>Edit Data</title>
+  </head>
+  <body>
+    <a class="button" href="{{ url_for('read_data', table_name=table_name) }}">Back to Read</a>    
+    <h1>Edit Data</h1>
+    <form method="POST" action="/update" id="update-form">
+      <input type="hidden" name="table_name" value="{{ table_name }}">
+      <label>{{ pk_column }}:</label>
+      <input type="text" name="pk" value="{{ pk_value }}">
+      <br><br>
+      {% for column in model_class.__table__.columns %}
+        {% if column.name != pk_column %}
+          <label>{{ column.name }}:</label>
+          <input type="text" name="{{ column.name }}" value="{{ getattr(model, column.name) }}">
+          <br><br>
+        {% endif %}
+      {% endfor %}
+      <input type="submit" value="Update">
+    </form>
+
+    <script>
+      document.querySelector('#update-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        fetch('/update', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (response.ok) {
+            window.alert('Data updated successfully!');
+            window.location = '{{ url_for('read_data', table_name=table_name) }}';
+          } else {
+            window.alert('Error updating data!');
+          }
+        });
+      });
+    </script>
+    <br>
+  </body>
+</html>
+{% endblock %}

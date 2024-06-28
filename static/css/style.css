@@ -1,0 +1,71 @@
+/* Custom font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Table style */
+table {
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  border-radius: 40px;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  background-color: #aaceaa;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+
+
+/* Button style */
+.button {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  background-color: #e6e6e6;
+  border: 1px solid #dcdcdc;
+  color: #333;
+  transition: background-color 0.2s ease-out, color 0.2s ease-out;
+}
+
+.button:hover {
+  background-color: #dcdcdc;
+  color: #fff;
+}
+
+.pagination {
+  display: flex;
+  margin-top: 20px;
+}
+
+.pagination li {
+  list-style-type: none;
+  margin: 0 10px;
+}
+
+.pagination li.active a {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.pagination li a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.pagination li.disabled a {
+  color: #6c757d;
+  pointer-events: none;
+  cursor: default;
+}
+
+
